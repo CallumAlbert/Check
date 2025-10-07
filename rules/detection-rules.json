@@ -50,6 +50,7 @@
       "^https://[^/]*\\.(youtube|youtu)\\.be(/.*)?$",
       "^https://[^/]*\\.apple\\.com(/.*)?$",
       "^https://[^/]*\\.dynamics\\.com(/.*)?$",
+      "^https://[^/]*\\.mobizio\\.com(/.*)?$",
       "^https://(?:[^/]*\\.)?zoom\\.us(/.*)?$"
     ],
     "context_indicators": {
