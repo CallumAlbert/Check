@@ -51,8 +51,10 @@
       "^https://[^/]*\\.apple\\.com(/.*)?$",
       "^https://[^/]*\\.dynamics\\.com(/.*)?$",
       "^https://[^/]*\\.mobizio\\.com(/.*)?$",
-      "^http://britishgaslite\\.co\\.uk(/.*)?$",
-      "^https://(?:[^/]*\\.)?zoom\\.us(/.*)?$"
+      "^https://(?:[^/]*\\.)?zoom\\.us(/.*)?$",
+      "^https?://(?:[^/]*\\.)?britishgaslite\\.co\\.uk(/.*)?$",
+      "^https?://(?:[^/]*\\.)?pstmrk\\.it(/.*)?$",
+      "^https://(?:[^/]*\\.)?registrarcorp\\.com(/.*)?$"
     ],
     "context_indicators": {
       "description": "Additional context that indicates legitimate discussion vs phishing",
