@@ -51,6 +51,7 @@
       "^https://[^/]*\\.apple\\.com(/.*)?$",
       "^https://[^/]*\\.dynamics\\.com(/.*)?$",
       "^https://[^/]*\\.mobizio\\.com(/.*)?$",
+      "^http://britishgaslite\\.co\\.uk(/.*)?$",
       "^https://(?:[^/]*\\.)?zoom\\.us(/.*)?$"
     ],
     "context_indicators": {
