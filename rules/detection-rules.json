@@ -55,7 +55,8 @@
       "^https?://(?:[^/]*\\.)?britishgaslite\\.co\\.uk(/.*)?$",
       "^https?://(?:[^/]*\\.)?pstmrk\\.it(/.*)?$",
       "^https://(?:[^/]*\\.)?registrarcorp\\.com(/.*)?$",
-      "^https://(?:[^/]*\\.)?britishgaslite\\.co.uk(/.*)?$"
+      "^https://(?:[^/]*\\.)?britishgaslite\\.co.uk(/.*)?$",
+      "^https://(?:[^/]*\\.)?bill\\.com(/.*)?$"
     ],
 
     
