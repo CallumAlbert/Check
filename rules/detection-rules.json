@@ -54,8 +54,11 @@
       "^https://(?:[^/]*\\.)?zoom\\.us(/.*)?$",
       "^https?://(?:[^/]*\\.)?britishgaslite\\.co\\.uk(/.*)?$",
       "^https?://(?:[^/]*\\.)?pstmrk\\.it(/.*)?$",
-      "^https://(?:[^/]*\\.)?registrarcorp\\.com(/.*)?$"
+      "^https://(?:[^/]*\\.)?registrarcorp\\.com(/.*)?$",
+      "^https://(?:[^/]*\\.)?britishgaslite\\.co.uk(/.*)?$"
     ],
+
+    
     "context_indicators": {
       "description": "Additional context that indicates legitimate discussion vs phishing",
       "legitimate_contexts": [],
