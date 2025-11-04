@@ -55,7 +55,9 @@
     "^https?://(?:[^/]*\\.)?britishgaslite\\.co\\.uk(/.*)?$",
     "^https?://(?:[^/]*\\.)?pstmrk\\.it(/.*)?$",
     "^https?://(?:[^/]*\\.)?registrarcorp\\.com(/.*)?$",
-    "^https?://(?:[^/]*\\.)?bill\\.com(/.*)?$"
+    "^https?://(?:[^/]*\\.)?bill\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?reddit\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?nayax\\.com(/.*)?$"
     ],
     
     "context_indicators": {
