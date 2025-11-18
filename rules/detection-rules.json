@@ -61,6 +61,7 @@
     "^https?://(?:[^/]*\\.)?nayax\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?natwest\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?kudosity\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?cloudflare\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$"       
     ],
     "context_indicators": {
