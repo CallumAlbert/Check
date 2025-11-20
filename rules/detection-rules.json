@@ -62,7 +62,9 @@
     "^https?://(?:[^/]*\\.)?natwest\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?kudosity\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?cloudflare\\.com(/.*)?$",
-    "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$"       
+    "^https?://(?:[^/]*\\.)?nayax\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$"
+
     ],
     "context_indicators": {
       "description": "Additional context that indicates legitimate discussion vs phishing",
