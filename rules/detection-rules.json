@@ -64,7 +64,8 @@
     "^https?://(?:[^/]*\\.)?cloudflare\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?nayax\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?peoplespartnership\\.co.uk(/.*)?$",
-    "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$"
+    "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$",
+    "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$"
 
     ],
     "context_indicators": {
