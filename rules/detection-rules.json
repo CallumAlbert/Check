@@ -65,6 +65,7 @@
     "^https?://(?:[^/]*\\.)?nayax\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?peoplespartnership\\.co.uk(/.*)?$",
     "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?asda\\.com(/.*)?$",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$"
 
     ],
