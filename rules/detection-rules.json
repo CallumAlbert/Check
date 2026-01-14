@@ -67,6 +67,7 @@
     "^https?://(?:[^/]*\\.)?activtrak\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?asda\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?docusign\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?trustpilot\\.com(/.*)?$",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$"
 
     ],
