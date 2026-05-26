@@ -69,6 +69,7 @@
     "^https?://(?:[^/]*\\.)?asda\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?docusign\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?trustpilot\\.com(/.*)?$",
+    "^https?://(?:[^/]*\\.)?metoffice.gov.uk/",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$"
 
     ],
