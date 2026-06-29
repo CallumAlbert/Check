@@ -70,6 +70,7 @@
     "^https?://(?:[^/]*\\.)?docusign\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?trustpilot\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?metoffice.gov.uk/",
+    "^https?://weather\\.metoffice.gov\\.uk(/.*)?$",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?zoho.com/"
 
