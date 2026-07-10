@@ -72,7 +72,7 @@
     "^https?://(?:[^/]*\\.)?metoffice.gov.uk/",
     "^https?://weather\\.metoffice.gov\\.uk(/.*)?$",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$",
-    "^https?://(?:[^/]*\\.)?britishgas.co.uk/",
+    "^https?://(?:[^/]*\\.)?britishgas\\.co\\.uk(/.*)?$",
     "^https?://(?:[^/]*\\.)?zoho.com/"
 
     ],
