@@ -93,6 +93,15 @@
 
                         <div class="setting-item">
                             <label class="setting-label">
+                                <input type="checkbox" id="forceMainThreadPhishingProcessing" class="setting-checkbox">
+                                <span class="checkbox-custom"></span>
+                                Force Main Thread Phishing Processing
+                            </label>
+                            <p class="setting-description">For debugging: disables background worker and forces phishing detection to run on the main thread (timing and logs will be more accurate, but performance may be reduced).</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
                                 <input type="checkbox" id="enableCippReporting" class="setting-checkbox">
                                 <span class="checkbox-custom"></span>
                                 Enable CIPP Reporting
@@ -161,6 +170,11 @@
                                     Rogue App Detected
                                 </label>
                                 <label class="setting-label">
+                                    <input type="checkbox" id="webhookEvent_domain_squatting_detected" class="setting-checkbox">
+                                    <span class="checkbox-custom"></span>
+                                    Domain Squatting Detected
+                                </label>
+                                <label class="setting-label">
                                     <input type="checkbox" id="webhookEvent_threat_detected" class="setting-checkbox">
                                     <span class="checkbox-custom"></span>
                                     Threat Detected
@@ -195,6 +209,14 @@
                             </label>
                             <p class="setting-description">Display a verification badge on legitimate Microsoft 365 login pages</p>
                         </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                Valid Page Badge Timeout (seconds)
+                                <input type="number" id="validPageBadgeTimeout" class="setting-input" min="0" max="300" step="1" value="5" required>
+                            </label>
+                            <p class="setting-description">Auto-dismiss timeout for the valid page badge in seconds. Set to 0 for no timeout (badge stays visible until manually dismissed).</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -208,7 +230,7 @@
                         <div class="setting-item">
                             <label class="setting-label">
                                 Config URL
-                                <input type="url" id="customRulesUrl" class="setting-input" placeholder="https://raw.githubusercontent.com/CyberDrain/ProjectX/refs/heads/main/rules/detection-rules.json">
+                                <input type="url" id="customRulesUrl" class="setting-input" placeholder="https://raw.githubusercontent.com/CyberDrain/Check/refs/heads/main/rules/detection-rules.json">
                             </label>
                             <p class="setting-description">URL to fetch detection configuration from (leave empty for default)</p>
                         </div>
@@ -225,8 +247,17 @@
                             <label class="setting-label">
                                 URL Allowlist (Regex or URL with wildcards)
                                 <textarea id="urlAllowlist" class="setting-textarea" rows="6" placeholder="Enter URLs or regex patterns, one per line:&#10;&#10;Simple URLs with wildcards:&#10;https://google.com/*&#10;https://*.microsoft.com/*&#10;&#10;Advanced regex patterns:&#10;^https://trusted\.example\.com/.*"></textarea>
+            </label>
+                            <p class="setting-description">Add URLs or regex patterns to allowlist from detection. Use simple URLs with * wildcards (e.g., https://google.com/*) or advanced regex patterns. These will be added to the exclusion rules without replacing the entire ruleset. <strong>This allowlist also protects the extracted domains from typosquatting, homoglyphs, and other domain squatting attacks.</strong></p>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <input type="checkbox" id="domainSquattingEnabled" class="setting-checkbox">
+                                <span class="checkbox-custom"></span>
+                                Enable Domain Squatting Detection
                             </label>
-                            <p class="setting-description">Add URLs or regex patterns to allowlist from detection. Use simple URLs with * wildcards (e.g., https://google.com/*) or advanced regex patterns. These will be added to the exclusion rules without replacing the entire ruleset.</p>
+                            <p class="setting-description">Enable or disable typosquatting, homoglyph, and combosquatting detection. Protected domains continue to come from detection rules and your URL allowlist.</p>
                         </div>
 
                         <div class="setting-item">
@@ -243,13 +274,25 @@
                     <div class="setting-group">
                         <div class="config-header">
                             <h3>Configuration Overview</h3>
-                            <button class="btn btn-secondary small" id="toggleConfigView">
-                                <span class="material-icons">code</span>
-                                Show Raw JSON
-                            </button>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-secondary small" id="expandCollapseAll">
+                                    <span class="material-icons">unfold_more</span>
+                                    Expand All
+                                </button>
+                                <button class="btn btn-secondary small" id="toggleConfigView">
+                                    <span class="material-icons">code</span>
+                                    Show Raw JSON
+                                </button>
+                            </div>
                         </div>
                         <div id="configDisplay" class="config-display">
                             <div class="config-loading">Loading configuration...</div>
+                            <div id="configSummary" class="config-summary" style="display:none;">
+                                <h4>Phishing Indicators with Code-Driven Logic</h4>
+                                <div id="codeDrivenIndicators"></div>
+                                <h4>Other Key Settings</h4>
+                                <ul id="configKeySettings"></ul>
+                            </div>
                         </div>
                         <p class="setting-description">Read-only view of the current detection rules and configuration</p>
                     </div>
@@ -300,14 +343,9 @@
                 <div class="logs-controls">
                     <div class="logs-filters">
                         <label class="setting-label">
-                            <input type="checkbox" id="enableDebugLogging" class="setting-checkbox">
-                            <span class="checkbox-custom"></span>
-                            Enable Debug Logging
-                        </label>
-                        <label class="setting-label">
                             <input type="checkbox" id="enableDeveloperConsoleLogging" class="setting-checkbox">
                             <span class="checkbox-custom"></span>
-                            Developer Mode
+                            Developer Mode (enables debug logging)
                         </label>
                         <label class="setting-label">
                             <input type="checkbox" id="simulateEnterpriseMode" class="setting-checkbox">
@@ -366,14 +404,6 @@
 
                         <div class="setting-item">
                             <label class="setting-label">
-                                Company URL
-                                <input type="url" id="companyURL" class="setting-input" placeholder="https://yourcompany.com">
-                            </label>
-                            <p class="setting-description">Your company website URL</p>
-                        </div>
-
-                        <div class="setting-item">
-                            <label class="setting-label">
                                 Product Name
                                 <input type="text" id="productName" class="setting-input" placeholder="Custom Extension Name">
                             </label>
@@ -386,6 +416,30 @@
                                 <input type="email" id="supportEmail" class="setting-input" placeholder="support@yourcompany.com">
                             </label>
                             <p class="setting-description">Email address for user support</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                Support URL
+                                <input type="url" id="supportUrl" class="setting-input" placeholder="https://support.yourcompany.com">
+                            </label>
+                            <p class="setting-description">URL opened by the popup Support button</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                Privacy URL
+                                <input type="url" id="privacyPolicyUrl" class="setting-input" placeholder="https://yourcompany.com/privacy">
+                            </label>
+                            <p class="setting-description">URL opened by the popup Privacy button</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                About URL
+                                <input type="url" id="aboutUrl" class="setting-input" placeholder="https://yourcompany.com/about">
+                            </label>
+                            <p class="setting-description">URL opened by the popup About button (leave empty to use extension About page)</p>
                         </div>
                     </div>
 
@@ -546,6 +600,7 @@
         </div>
     </div>
 
+    <script src="../scripts/browser-polyfill-inline.js"></script>
     <script src="options.js"></script>
 </body>
 </html>

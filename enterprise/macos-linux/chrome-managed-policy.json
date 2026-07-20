@@ -10,6 +10,7 @@
             "benimdeioplgkhanklclahllklceahbe": {
                 "showNotifications": true,
                 "enableValidPageBadge": true,
+                "validPageBadgeTimeout": 5,
                 "enablePageBlocking": true,
                 "enableCippReporting": false,
                 "cippServerUrl": "",
@@ -17,12 +18,27 @@
                 "customRulesUrl": "",
                 "updateInterval": 24,
                 "enableDebugLogging": false,
+                "domainSquatting": {
+                    "enabled": true
+                },
                 "customBranding": {
                     "companyName": "",
                     "productName": "",
                     "supportEmail": "",
+                    "supportUrl": "",
+                    "privacyPolicyUrl": "",
+                    "aboutUrl": "",
                     "primaryColor": "#F77F00",
                     "logoUrl": ""
+                },
+                "genericWebhook": {
+                    "enabled": false,
+                    "url": "https://webhook.example.com/endpoint",
+                    "events": [
+                        "detection_alert",
+                        "page_blocked",
+                        "threat_detected"
+                    ]
                 }
             }
         }

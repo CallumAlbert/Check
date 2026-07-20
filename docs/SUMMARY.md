@@ -1,6 +1,11 @@
 # Table of contents
 
 - [About](README.md)
+- [Firefox Support](firefox-support.md)
+
+## Features
+
+- [Domain Squatting Detection](features/domain-squatting-detection.md)
 
 ## Deployment
 
@@ -10,6 +15,14 @@
     - [Domain Deployment](deployment/chrome-edge-deployment-instructions/windows/domain-deployment.md)
     - [RMM Deployment](deployment/chrome-edge-deployment-instructions/windows/rmm-deployment.md)
   - [MacOS](deployment/chrome-edge-deployment-instructions/macos.md)
+- [Firefox Deployment](deployment/firefox-deployment.md)
+
+## Removal
+
+- [Removal Overview](removal/README.md)
+  - [Windows](removal/windows/README.md)
+    - [Chrome and Edge](removal/windows/chrome-edge.md)
+    - [Firefox](removal/windows/firefox.md)
 
 ## Settings
 

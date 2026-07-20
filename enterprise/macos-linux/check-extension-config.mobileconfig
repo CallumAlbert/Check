@@ -46,15 +46,35 @@
                     <key>Value</key>
                     <string />
                 </dict>
+                <key>genericWebhook</key>
+                <dict>
+                    <key>Value</key>
+                    <dict>
+                        <key>enabled</key>
+                        <false />
+                        <key>url</key>
+                        <string />
+                        <key>events</key>
+                        <array />
+                    </dict>
+                </dict>
                 <key>customRulesUrl</key>
                 <dict>
                     <key>Value</key>
-                    <string>https://raw.githubusercontent.com/CyberDrain/ProjectX/refs/heads/main/rules/detection-rules.json</string>
+                    <string>https://raw.githubusercontent.com/CyberDrain/Check/refs/heads/main/rules/detection-rules.json</string>
                 </dict>
                 <key>updateInterval</key>
                 <dict>
                     <key>Value</key>
                     <integer>24</integer>
+                </dict>
+                <key>domainSquatting</key>
+                <dict>
+                    <key>Value</key>
+                    <dict>
+                        <key>enabled</key>
+                        <false />
+                    </dict>
                 </dict>
                 <!-- Logging Settings -->
                 <key>enableDebugLogging</key>

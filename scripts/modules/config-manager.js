@@ -3,6 +3,7 @@
  * Handles enterprise configuration, branding, and settings management
  */
 
+import { chrome, storage } from "../browser-polyfill.js";
 import logger from "../utils/logger.js";
 
 export class ConfigManager {
@@ -27,7 +28,7 @@ export class ConfigManager {
       this.enterpriseConfig = await this.loadEnterpriseConfig();
 
       // Load local configuration with safe wrapper
-      const localConfig = await safe(chrome.storage.local.get(["config"]));
+      const localConfig = await safe(storage.local.get(["config"]));
 
       // Migrate legacy configuration structure if needed
       if (localConfig?.config) {
@@ -88,7 +89,7 @@ export class ConfigManager {
       let simulateEnterpriseMode = false;
       if (isDevelopment) {
         const simulateMode = await safe(
-          chrome.storage.local.get(["simulateEnterpriseMode"])
+          storage.local.get(["simulateEnterpriseMode"])
         );
         simulateEnterpriseMode = simulateMode?.simulateEnterpriseMode || false;
       }
@@ -107,15 +108,31 @@ export class ConfigManager {
           cippServerUrl: "",
           cippTenantId: "",
           customRulesUrl:
-            "https://raw.githubusercontent.com/CyberDrain/ProjectX/refs/heads/main/rules/detection-rules.json",
+            "https://raw.githubusercontent.com/CyberDrain/Check/refs/heads/main/rules/detection-rules.json",
           updateInterval: 24,
           enableDebugLogging: false,
+          domainSquatting: {
+            enabled: false,
+            deviationThreshold: 2,
+            algorithms: {
+              levenshtein: true,
+              homoglyph: true,
+              typosquat: true,
+              combosquat: true,
+            },
+            protectedDomains: [],
+            Action: "block",
+            logDetections: true,
+          },
           // Note: enableDeveloperConsoleLogging is not policy-managed - remains under user control
 
           // Custom branding (matches managed_schema.json structure)
           customBranding: {
             companyName: "CyberDrain",
             productName: "Check Enterprise",
+            supportUrl: "",
+            privacyPolicyUrl: "",
+            aboutUrl: "",
             primaryColor: "#F77F00",
             logoUrl:
               "https://cyberdrain.com/images/favicon_hu_20e77b0e20e363e.png",
@@ -124,7 +141,7 @@ export class ConfigManager {
       }
 
       // Attempt to load from managed storage (deployed via GPO/Intune)
-      const managedConfig = await safe(chrome.storage.managed.get(null));
+      const managedConfig = await safe(storage.managed.get(null));
 
       if (managedConfig && Object.keys(managedConfig).length > 0) {
         logger.log("Check: Enterprise configuration found");
@@ -164,7 +181,7 @@ export class ConfigManager {
 
       // First, try to load user-configured branding from storage
       const userBranding = await safe(
-        chrome.storage.local.get(["brandingConfig"])
+        storage.local.get(["brandingConfig"])
       );
 
       if (userBranding && userBranding.brandingConfig) {
@@ -233,6 +250,12 @@ export class ConfigManager {
     if (merged.customBranding) {
       delete merged.customBranding;
     }
+    
+    // Auto-enable debug logging when developer console logging is enabled
+    if (merged.enableDeveloperConsoleLogging === true && merged.enableDebugLogging !== true) {
+      merged.enableDebugLogging = true;
+      logger.log("Check: Auto-enabled debug logging (developer console logging is enabled)");
+    }
 
     // Ensure enterprise policies cannot be overridden
     if (enterpriseConfig.enforcedPolicies) {
@@ -281,6 +304,21 @@ export class ConfigManager {
       customRulesUrl: "https://raw.githubusercontent.com/CyberDrain/Check/refs/heads/main/rules/detection-rules.json",
       updateInterval: 24, // hours
 
+      // Domain squatting runtime settings
+      domainSquatting: {
+        enabled: false,
+        deviationThreshold: 2,
+        algorithms: {
+          levenshtein: true,
+          homoglyph: true,
+          typosquat: true,
+          combosquat: true,
+        },
+        protectedDomains: [],
+        Action: "block",
+        logDetections: true,
+      },
+
       // Performance settings
       scanDelay: 100,
       maxScanDepth: 10,
@@ -317,16 +355,17 @@ export class ConfigManager {
       version: "1.0.0",
 
       // Visual branding
-      primaryColor: "#2563eb",
+      primaryColor: "#F77F00",
       secondaryColor: "#64748b",
       logoUrl: "images/logo.png",
       faviconUrl: "images/favicon.ico",
 
       // Contact information
-      supportEmail: "support@check.com",
-      supportUrl: "https://support.check.com",
-      privacyPolicyUrl: "https://check.com/privacy",
-      termsOfServiceUrl: "https://check.com/terms",
+      supportEmail: "",
+      supportUrl: "",
+      privacyPolicyUrl: "",
+      aboutUrl: "",
+      termsOfServiceUrl: "",
 
       // Customizable text
       welcomeMessage:
@@ -357,7 +396,7 @@ export class ConfigManager {
       };
 
       const defaultConfig = this.getDefaultConfig();
-      await safe(chrome.storage.local.set({ config: defaultConfig }));
+      await safe(storage.local.set({ config: defaultConfig }));
       this.config = defaultConfig;
     } catch (error) {
       logger.error("Check: Failed to set default config:", error);
@@ -377,7 +416,7 @@ export class ConfigManager {
       };
 
       // Get the CURRENT LOCAL CONFIG (not merged), so we only save user overrides
-      const localConfigResult = await safe(chrome.storage.local.get(["config"]));
+      const localConfigResult = await safe(storage.local.get(["config"]));
       const localConfig = localConfigResult?.config || {};
       
       // Merge updates into the local config (not the merged config)
@@ -406,7 +445,7 @@ export class ConfigManager {
       }
 
       // Save only the user's config overrides to local storage
-      await safe(chrome.storage.local.set({ config: updatedLocalConfig }));
+      await safe(storage.local.set({ config: updatedLocalConfig }));
       
       // Reload the full merged config
       await this.loadConfig();
@@ -455,8 +494,12 @@ export class ConfigManager {
       await this.loadConfig();
     }
 
-    // Start with the base branding config
-    let finalBranding = await this.getBrandingConfig();
+    // Start with defaults to ensure required branding links are always available
+    const defaultBranding = this.getDefaultBrandingConfig();
+    let finalBranding = {
+      ...defaultBranding,
+      ...(await this.getBrandingConfig()),
+    };
 
     // If enterprise has custom branding, merge it in (takes precedence)
     if (this.enterpriseConfig && this.enterpriseConfig.customBranding) {
@@ -471,6 +514,11 @@ export class ConfigManager {
     const currentConfig = await this.getConfig();
     if (currentConfig.genericWebhook) {
       finalBranding.genericWebhook = currentConfig.genericWebhook;
+    }
+
+    // Derive support URL when only partial branding is configured
+    if (!finalBranding.supportUrl && finalBranding.supportEmail) {
+      finalBranding.supportUrl = `mailto:${finalBranding.supportEmail}`;
     }
 
     return finalBranding;
@@ -498,7 +546,7 @@ export class ConfigManager {
         `Check: Migrating configuration from version ${previousVersion}`
       );
 
-      const currentConfig = await safe(chrome.storage.local.get(["config"]));
+      const currentConfig = await safe(storage.local.get(["config"]));
       if (!currentConfig?.config) return;
 
       // Add migration logic here for future versions
@@ -562,7 +610,7 @@ export class ConfigManager {
             return undefined;
           }
         };
-        await safe(chrome.storage.local.set({ branding: importData.branding }));
+        await safe(storage.local.set({ branding: importData.branding }));
         this.brandingConfig = importData.branding;
       }
 
