@@ -79,7 +79,8 @@
     "^https?://weather\\.metoffice.gov\\.uk(/.*)?$",
     "^https?://admin\\.teams\\.microsoft\\.com(/.*)?$",
     "^https?://(?:[^/]*\\.)?britishgas\\.co\\.uk(/.*)?$",
-    "^https?://(?:[^/]*\\.)?zoho.com/",
+    "^https?://(?:[^/]*\\.)?zoho.com/?$",
+    "^https?://(?:[^/]*\\.)?mhhsprogramme.co.uk/?$",
     "^https?://myphsonline\\.ciamlogin\\.com(/.*)?$"
 
     ],
